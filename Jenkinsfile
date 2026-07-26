@@ -1,19 +1,20 @@
 pipeline {
     agent any
     parameters {
-        choice(
-            name: 'ENVIRONMENT', choices: ['staging', 'production'], description: 'Target Environment')
+        choice(name: 'ENVIRONMENT', choices: [‘staging’, ‘production’], description: 'Target environment')
     }
+
     environment {
         APP_NAME = 'demo-app'
     }
-	    stages {
-	        stage('Build') {
-		    	steps {
-		        echo "Building ${env.APP_NAME}"
-		    	}
-			}		
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Building ${env.APP_NAME}"
+            }
         }
+
         stage('Tests') {
             parallel {
                 stage('Unit') {
@@ -21,32 +22,36 @@ pipeline {
                         sh 'echo Running unit tests'
                     }
                 }
-		stage('Integration') {
-                steps {
-                        sh 'echo Integration tests running'
-		    	}
-	        }
-	    }
-    }
-	stage('Approve') {
-    	when {
-        	expression { params.ENVIRONMENT =='production' }
-    	}
-    	steps {
-        	input message: 'Deploy to Production?'
-    	}
-	}
+                stage('Integration') {
+                    steps {
+                        sh 'echo Running Integration tests']
+                    }
+                }
+            }
+        }
+
+        stage('Approve') {
+            when {
+                expression { params.ENVIRONMENT == 'production' }
+            }
+            steps {
+                input message: 'Deploy to production?'
+            }
+        }
+
         stage('Deploy') {
             steps {
-                echo "Deploying application to ${params.ENVIRONMENT}"
+                sh "echo Deploying to ${params.ENVIRONMENT}"
             }
         }
     }
+
     post {
         success {
-            echo 'Pipeline Succeeded'
+            echo 'Pipeline succeeded'
         }
         failure {
-            echo 'Pipeline Failed.'
+            echo 'Pipeline failed'
         }
+    }
 }
