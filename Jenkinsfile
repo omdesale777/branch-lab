@@ -8,7 +8,7 @@ pipeline {
         )
     }
     environment {
-        APP_NAME == 'demo-app'
+        APP_NAME = 'demo-app'
     }
     stages {
         stage('Build') {
@@ -29,7 +29,7 @@ pipeline {
 		    }
 	        }
 	    }
-        }
+    }
 	stage('Approve') {
             when {
                 expression { params.ENVIRONMENT == production }
