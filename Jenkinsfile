@@ -2,7 +2,7 @@ pipeline {
     agent any
     parameters {
         choice(
-            name: 'ENVIRONMENT', choices: ['staging','production'], description: 'Target Environment')
+            name: 'ENVIRONMENT', choices: ['staging', 'production'], description: 'Target Environment')
     }
     environment {
         APP_NAME = 'demo-app'
@@ -30,7 +30,7 @@ pipeline {
     }
 	stage('Approve') {
     	when {
-        	expression { params.ENVIRONMENT == 'production' }
+        	expression { params.ENVIRONMENT =='production' }
     	}
     	steps {
         	input message: 'Deploy to Production?'
